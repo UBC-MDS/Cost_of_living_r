@@ -9,5 +9,17 @@ We are aiming to create 4 different visualizations within the dashboard. The fir
 <br>
 <img src="img/final_dashboard_design.jpg">
 
+## Setup Instructions
+To run the app locally and reproduce yourself, fork this repo and follow the below steps in your local repository root:
+
+1. `cd Cost_of_living_r`
+2. `Rscript init.R`
+3. Comment out `app$run_server(host = '0.0.0.0')` in the app.R file (this is just for Heroku deployment) and switch it to `app$run_server(debug = F)`. 
+3. `Rscript app.R` 
+4. Enter the local server URL into your browser: http://127.0.0.1:8050
+
 # License
 Licensed under the terms of the MIT license.
+
+
+
