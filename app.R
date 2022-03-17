@@ -1,12 +1,12 @@
 library(tidyverse)
 library(dash)
-library(dashBootstrapComponents)
+# library(dashBootstrapComponents)
 library(ggplot2)
 library(plotly)
 library(here)
 library(ggthemes)
 library(dashHtmlComponents)
-library(dashCoreComponents)
+
 
 # 1: Functions
 
@@ -106,6 +106,7 @@ price_subset <- data.frame(
             "transportation_public",
             "shopping",
             "utility_bills"))
+
 #read data
 data_df <- read.csv("data/processed_data.csv")
 
@@ -175,9 +176,11 @@ sidebar <- htmlDiv(list(
   htmlDiv(
     list(
   htmlLabel(list('Select monthly costs: ', dccDropdown(id = 'cost_subset', 
-                                                       options = price_subset$title,
+                                                       options = price_subset$feature %>% 
+                                                       purrr::map(function(col) list(label = price_subset$title[price_subset$feature == col], 
+                                                                                     value = col)),
                                                        placeholder = "Total monthly costs",
-                                                       value='all',
+                                                       value="all",
                                                        multi = FALSE,
                                                        style=list('marginRight'='10px')
   )
@@ -198,7 +201,6 @@ sidebar <- htmlDiv(list(
   )
   )
   ),
-  htmlBr(),
   htmlBr(),
   htmlH6("The currency unit has been converted from Euro to USD and the current rate is 1 Euro = 1.14 USD", 
           style=list("justify"= "center", "textAlign"= "center"))
