@@ -6,6 +6,7 @@ library(plotly)
 library(here)
 library(ggthemes)
 library(dashHtmlComponents)
+library(dashCoreComponents)
 
 # 1: Functions
 
