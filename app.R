@@ -1,4 +1,6 @@
-library(tidyverse)
+library(purrr)
+library(dplyr)
+library(forcats)
 library(dash)
 # library(dashBootstrapComponents)
 library(ggplot2)
