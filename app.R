@@ -188,8 +188,8 @@ sidebar <- htmlDiv(list(
   htmlDiv(
     list(htmlLabel(list('Expected monthly earnings ($USD)', dccInput(id="earning", 
                                               type="number",
-                                              placeholder=2000,
-                                              value=2000,
+                                              placeholder=3000,
+                                              value=3000,
                                               style=list('marginRight'='10px')
   )
   )
