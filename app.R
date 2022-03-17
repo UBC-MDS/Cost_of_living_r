@@ -1,10 +1,11 @@
 library(tidyverse)
 library(dash)
-library(dashHtmlComponents)
+library(dashBootstrapComponents)
 library(ggplot2)
 library(plotly)
 library(here)
 library(ggthemes)
+library(dashHtmlComponents)
 
 # 1: Functions
 
