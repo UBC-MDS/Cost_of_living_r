@@ -294,10 +294,10 @@ how_it_works = dbcAccordion(list(
     htmlP("After that choose the cities or a region from the drop down menu")
   ), title="Drop down menu for cities or region"),
   dbcAccordionItem(list(
-    htmlP("Select a monthly cost you would like to compare the cities with, the next tab provides detailed descriptions on the montly costs.")
-  ), title="Drop down menu for montly cost"), 
+    htmlP("Select a monthly cost you would like to compare the cities with, the next tab provides detailed descriptions on the monthly costs.")
+  ), title="Drop down menu for monthly cost"), 
   dbcAccordionItem(list(
-    htmlP("In order to see how much save in different cities, enter your expected montly earnings.")
+    htmlP("In order to see how much one can save in different cities, enter your expected monthly earnings.")
   ), title="Enter monthly earnings ")
 )
 )
