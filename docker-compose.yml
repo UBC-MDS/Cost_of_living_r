@@ -1,0 +1,10 @@
+# docker-compose.yml
+version: '3'
+services:
+  # main application
+  myapp:
+    container_name: cost-of-living-r
+    build:
+      .
+    ports:
+      - "8050:8050"
