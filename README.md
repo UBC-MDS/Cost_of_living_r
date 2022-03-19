@@ -12,21 +12,7 @@ More details about the usage of this dashboard can be found in the [proposal doc
 
 # Usage
 
-## Run the app locally using docker
-
-To run this app using Docker, write the following commands after cloning the repo:
-
-```bash
-git clone https://github.com/UBC-MDS/Cost_of_living_r
-cd Cost_of_living_r
-docker-compose build
-docker-compose up
-```
-Finally, open the app in the following URL localhost:8050/.
-<br>
-<br>
-
-## Run app locally without Docker
+## Run app locally 
 To install the dashboard and run it locally,follow the steps below:
 
 Run the following command at the root directory of the project:
