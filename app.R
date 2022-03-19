@@ -23,7 +23,7 @@ plot1 <- function(subset, cost_subset) {
   p <- ggplot(subset1, aes(x = fct_reorder(city, sum),
                           y = sum,
                           fill = city)) +
-    labs(x = 'City', y = y_title) +
+    labs(x = 'City', y = "Sum of Selected Costs") +
     geom_col(show.legend = FALSE) +
     theme(axis.text.x = element_text(angle = 45),
           legend.position = "none")
@@ -81,7 +81,7 @@ plot3 <- function(subset, cost_subset) {
       hovertext = ~hovertext,
       hoverinfo = 'text'
     ) %>% 
-    colorbar(title = y_title, tickprefix = '$') %>%
+    colorbar(title = "Sum of Selected Costs", tickprefix = '$') %>%
     layout(geo = g)
   ggplotly(p)
 }
@@ -167,7 +167,7 @@ sidebar <- htmlDiv(list(
       options = unique(data_df$region) %>% purrr::map(function(col) list(label = col, value = col)),
       placeholder = "Select region",
       value = "Canada",
-      multi = FALSE
+      multi = TRUE
     )
     )
   ),
@@ -461,5 +461,5 @@ app$callback(
   }
 )
 
-
+# app$run_server(debug = T)
 app$run_server(host = '0.0.0.0')
