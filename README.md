@@ -1,7 +1,8 @@
 # Exploring the cost of living
 Authors: Affrin Sultana, Arushi Ahuja, Jiwei Hu, Margot Vore
 <br>
-The cost-of-living-comparison dashboard can be accessed [here](https://cost-of-living-r.herokuapp.com/)
+
+The Cost of Living Comparison dashboard can be accessed [here](https://cost-of-living-r.herokuapp.com/)
 <br>
 
 This r-based dashboard is designed to help new college graduates explore the cost of living in different major cities around the world.Our dashboard aims to ease the decision making for the last factor mentioned.In this project , we are using the **Cost of Living - NUMBEO Dataset** which is avaliable in [Kaggle](https://www.kaggle.com/joeypp/cost-of-living-numbeo-dataset).
@@ -21,8 +22,8 @@ Using our app online is as easy as clicking the [link](https://cost-of-living-r.
 To run this app using Docker, write the following commands after cloning the repo:
 
 ```bash
-git clone https://github.com/UBC-MDS/Cost_of_living_py.git
-cd Cost_of_living_py
+git clone https://github.com/UBC-MDS/Cost_of_living_r
+cd Cost_of_living_r
 docker-compose build
 docker-compose up
 ```
@@ -50,7 +51,7 @@ Copy and past the local host address given by the command to your internet brows
 
 **Run the dashboard via RStudio**
 
-Open app.R in RStudio and hit the source bottom at the top right corner of the app pane. Copy and past the local host address given by the command to your internet browser. 
+Open app.R in RStudio, set your working directory to the Cost_of_living_r folder, and hit the source bottom at the top right corner of the app pane. Copy and past the local host address given by the command to your internet browser. 
 
 
 
@@ -94,4 +95,7 @@ This dashboard was created by Affrin Sultana, Arushi Ahuja, Jiwei Hu, and Margot
 The raw data for this dashboard was sourced from this [Kaggle dataset](https://www.kaggle.com/joeypp/cost-of-living-numbeo-dataset)
 
 
-
+TODO  
+Docker?
+Gif?
+Comments of commits 
