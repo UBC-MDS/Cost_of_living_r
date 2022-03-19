@@ -94,8 +94,3 @@ This dashboard was created by Affrin Sultana, Arushi Ahuja, Jiwei Hu, and Margot
 #  Credits
 The raw data for this dashboard was sourced from this [Kaggle dataset](https://www.kaggle.com/joeypp/cost-of-living-numbeo-dataset)
 
-
-TODO  
-Docker?
-Gif?
-Comments of commits 
