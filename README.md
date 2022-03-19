@@ -12,11 +12,6 @@ More details about the usage of this dashboard can be found in the [proposal doc
 
 # Usage
 
-## App link on Heroku
-
-Using our app online is as easy as clicking the [link](https://cost-of-living-r.herokuapp.com/)!
-<br>
-<br>
 ## Run the app locally using docker
 
 To run this app using Docker, write the following commands after cloning the repo:
@@ -27,7 +22,7 @@ cd Cost_of_living_r
 docker-compose build
 docker-compose up
 ```
-Finally, open the app in the following URL localhost:8000/.
+Finally, open the app in the following URL localhost:8050/.
 <br>
 <br>
 
