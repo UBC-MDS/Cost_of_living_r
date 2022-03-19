@@ -7,21 +7,27 @@ library(plotly)
 library(here)
 library(ggthemes)
 library(dashHtmlComponents)
+library(data.table)
 
 
 # 1: Functions for plots
 
 plot1 <- function(subset, cost_subset) {
-  
-  y_title <- price_subset$title[price_subset$feature == cost_subset]
-  p <- ggplot(subset, aes(x = fct_reorder(city, !!sym(cost_subset)),
-                          y = !!sym(cost_subset),
+  subset1 <- copy(subset)
+  cols <- cost_subset
+  cols[length(cost_subset)+1] <- list("city")
+  subset1 <- subset1[, colnames(subset1) %in% cols]
+  subset1$sum <- rowSums(subset1[sapply(subset1, is.numeric)], na.rm = TRUE)
+  cats <- price_subset$title[price_subset$feature %in%  cost_subset]
+  y_title <- paste0(cats, collapse = "+")
+  p <- ggplot(subset1, aes(x = fct_reorder(city, sum),
+                          y = sum,
                           fill = city)) +
     labs(x = 'City', y = y_title) +
     geom_col(show.legend = FALSE) +
     theme(axis.text.x = element_text(angle = 45),
           legend.position = "none")
-  ggplotly(p)
+  ggplotly(p,tooltip = c("city", "sum"))
 }
 
 plot2 <- function(subset, earning) {
@@ -35,11 +41,19 @@ plot2 <- function(subset, earning) {
     labs(y = "Monthly Surplus (USD)", x = "City") +
     theme(axis.text.x = element_text(angle = 45),
           legend.position = "none")
-  ggplotly(p)
+  ggplotly(p,tooltip = c("surplus"))
 }
 
 plot3 <- function(subset, cost_subset) {
-  y_title <- price_subset$title[price_subset$feature == cost_subset]
+  subset1 <- copy(subset)
+  cols <- cost_subset
+  cols[length(cols)+1] <- list("city")
+  cols[length(cols)+1] <- list("longitude")
+  cols[length(cols)+1] <- list("latitude")
+  subset1 <- subset1[, colnames(subset1) %in% cols]
+  subset1$sum <- rowSums(subset1[sapply(subset1, is.numeric)], na.rm = TRUE) %>% round(2) 
+  cats <- price_subset$title[price_subset$feature %in%  cost_subset]
+  y_title <- paste0(cats, collapse = "+")
   g <- list(   
     showframe = T,
     showcoastlines = T,
@@ -48,21 +62,21 @@ plot3 <- function(subset, cost_subset) {
     landcolor = toRGB("grey90")
   )
   
-  subset$hovertext <- paste("City:",
-                            subset$city,
+  subset1$hovertext <- paste("City:",
+                            subset1$city,
                             "<br>",
-                            y_title,
+                             y_title,
                             ":",
-                            subset[[cost_subset]])
+                            subset1[["sum"]])
   
-  p <- plot_geo(subset)%>% 
+  p <- plot_geo(subset1)%>% 
     add_markers(
       
       x = ~longitude, 
       y = ~latitude, 
       text = ~city,
-      color = subset[[cost_subset]],
-      size = subset[[cost_subset]],
+      color = subset1[["sum"]],
+      size = subset1[["sum"]],
       marker=list(sizeref=0.15, sizemode="area"),
       hovertext = ~hovertext,
       hoverinfo = 'text'
@@ -82,7 +96,7 @@ plot4 <- function(subset) {
     labs(y = "Property Price (USD)", x = "City")+
     theme(axis.text.x = element_text(angle = 45),
           legend.position = "none")
-  ggplotly(p)
+  ggplotly(p,tooltip = c("property_price"))
 }
 
 
@@ -142,7 +156,7 @@ sidebar <- htmlDiv(list(
         id = 'selection_mode',
         options=list(list('label' = 'Regions', 'value' = 1),
                      list('label' = 'Cities', 'value' = 2)),
-        value=2,
+        value=1,
         inputStyle=list("margin-left"= "25px",'margin-right'= '5px'))
     )
   ),
@@ -152,8 +166,8 @@ sidebar <- htmlDiv(list(
       id = 'region_selection',
       options = unique(data_df$region) %>% purrr::map(function(col) list(label = col, value = col)),
       placeholder = "Select region",
-      value = "Canada"
-      
+      value = "Canada",
+      multi = FALSE
     )
     )
   ),
@@ -177,9 +191,11 @@ sidebar <- htmlDiv(list(
                                                              purrr::map(function(col) list(label = price_subset$title[price_subset$feature == col], 
                                                                                            value = col)),
                                                            placeholder = "Select monthly costs",
-                                                           value="all",
-                                                           multi = FALSE,
-                                                           style=list('marginRight'='10px')
+                                                           value=c("all"),
+                                                           multi = TRUE,
+                                                           style=list(
+                                                             width='100%'
+                                                           )
       )
       )
       )
@@ -241,7 +257,7 @@ footer = htmlFooter(list(dccMarkdown(
   "*The raw data for this dashboard was sourced from this 
   [Kaggle dataset](https://www.kaggle.com/joeypp/cost-of-living-numbeo-dataset). 
   For more details about data processing and the dashboard please refer to 
-  the projects [GitHub page](https://github.com/UBC-MDS/Cost_of_living_py).*"
+  the projects [GitHub page](https://github.com/UBC-MDS/Cost_of_living_r).*"
 )), 
 style=list(
   "textAlign"= "center",
@@ -294,10 +310,10 @@ how_it_works = dbcAccordion(list(
     htmlP("After that choose the cities or a region from the drop down menu")
   ), title="Drop down menu for cities or region"),
   dbcAccordionItem(list(
-    htmlP("Select a monthly cost you would like to compare the cities with, the next tab provides detailed descriptions on the montly costs.")
-  ), title="Drop down menu for montly cost"), 
+    htmlP("Select a monthly cost you would like to compare the cities with, the next tab provides detailed descriptions on the monthly costs.")
+  ), title="Drop down menu for monthly cost"), 
   dbcAccordionItem(list(
-    htmlP("In order to see how much save in different cities, enter your expected montly earnings.")
+    htmlP("In order to see how much one can save in different cities, enter your expected monthly earnings.")
   ), title="Enter monthly earnings ")
 )
 )
@@ -315,7 +331,7 @@ content <- dbcContainer(
                   dbcCardHeader('Monthly Cost Comparison'),
                   dbcCardBody(
                     comparison_plot,
-                    style=list('width' = '15', 'height'= '450px')
+                    style=list("height"= "30rem")
                   )))),
                 htmlBr(),
                 dbcRow(list(
@@ -323,13 +339,13 @@ content <- dbcContainer(
                     dbcCardHeader('How much can you save a month?'),
                     dbcCardBody(
                       monthly_surplus,
-                      style=list('width' = '15', 'height'= '450px')
+                      style=list("height"= "30rem")
                     )))),
                   dbcCol(dbcCard(list(
                     dbcCardHeader('Average property price per square meter'),
                     dbcCardBody(
                       property_price,
-                      style=list('width' = '15', 'height'= '450px')
+                      style=list("height"= "30rem")
                     )))) 
                 )),
                 htmlBr(),
@@ -338,7 +354,7 @@ content <- dbcContainer(
                     dbcCardHeader('Map of living costs'),
                     dbcCardBody(
                       heat_map,
-                      style=list('width' = '15', 'height'= '450px')
+                      style=list("height"= "30rem")
                     ))))
                 )),
                 htmlBr(),
@@ -401,12 +417,13 @@ app$callback(
       
     } 
     else if (selection_mode == SELECTION_CITY) {
+     
       subset <- data_df %>% 
         filter(city %in% cities)
       
     }
     
-    
+ 
     comparison_plot <- plot1(subset, cost_subset)
     monthly_surplus <- plot2(subset, earning)
     property_price <- plot4(subset)
